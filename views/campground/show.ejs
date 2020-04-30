@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>YElp camp</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="/stylesheet/main.css"> 
+</head>
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+               
+  
+  <a class="navbar-brand" href="/">Yelpcamp</a>
+
+  <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <% if(!currentUser){ %>
+          <li><a href="/login">Login</a></li>
+          <li><a href="/register">sign up</a></li>
+          <% }
+          else { %>
+            <li><a href="#">signed in As <%=currentUser.username %></a></li>
+          <li><a href="/logout">Logout</a></li>
+          <% }%>
+      </ul>
+  </div>
+  </div>
+  </nav>
+  <div class="container">
+    <% if (error && error.length !=0) {%>
+      <div class="alert alert-danger" role="alert">
+        <%= error %>
+      </div>
+    <% } %>
+    <% if (success && success.length !=0) {%>
+      <div class="alert alert-success" role="alert">
+        <%= success %>
+      </div>
+    <% } %>
+  </div>
+<!--***************************************************-->
+
+
+
+
+
+
+
+
+
+  <h1>hii its show pg</h1> 
+  <div class="container">
+      <div class="row">
+          <div class="col-md-3">
+              <p class="lead">Yelpcamp</p>
+              <div class="list-group">
+                   <li class="list-group-item active">Info 1</li>
+                   <li class="list-group-item">Info 2</li>
+                   <li class="list-group-item">Info 3</li>
+
+              </div>
+          </div>
+          <div class="col-md-9">
+              <div class="thumbnail">
+                <img class="image-responsive" src="<%= campground.image %> ">
+              <div class="caption-full">
+                  <h4 class="pull-right"><%= campground.price %>/night</h4>
+                  <h4><a><%= campground.name %></a></h4>
+                  <p><%= campground.description %></p>
+                  <p>
+                     <em> Submitted by <%= campground.author.username %></em></p>
+            <% if(currentUser && campground.author.id.equals(currentUser._id))
+            {%>
+                     <a class="btn btn-warning" href="/campgrounds/<%=campground._id%>/edit">edit</a>
+             <form id="del" action="/campgrounds/<%= campground._id%>?_method=DELETE" method="POST">
+            <button class="btn btn-danger">Delete</button>
+            </form>
+       <% }%>
+            </div>
+            </div>
+            <div class="well">
+                <div class="text-right">
+                    <a class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new">Add new comment</a>
+                </div>
+               <hr>
+            <% campground.comments.forEach(function(comment){ %>
+                <div class="row">
+                    <div class="col-md-12">
+                       <strong> <%= comment.author.username %></strong>
+                       <p>
+                        <%= comment.text %>
+                       </p>
+                       <% if(currentUser && comment.author.id.equals(currentUser._id))
+            {%>
+                       <a class="btn btn-xs btn-warning"
+                        href="/campgrounds/<%= campground._id %>/comments/<%=comment._id %>/edit">
+                        Edit</a>
+                        <form id="del" action="/campgrounds/<%= campground._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-xs btn-danger">Delete</button>
+                            </form>
+                        <%}%>
+                 <span class="pull-right">10 days ago</span>
+                    
+                 </div>
+                </div>
+           <% })%>
+                    
+           
+            </div>
+          </div>
+      </div>
+  </div>
+
+</body>
+</html>
